@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Simulasi Tumbukan Dua Benda (Gaya Impuls)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            text-align: center;
+        }
+
+        canvas {
+            background: white;
+            border: 2px solid black;
+            margin-top: 10px;
+        }
+
+        .panel {
+            margin: 10px auto;
+            width: 600px;
+            background: #ffffff;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        }
+
+        input {
+            width: 60px;
+        }
+
+        button {
+            padding: 8px 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Simulasi Tumbukan Dua Benda (Gaya Impuls)</h2>
+
+<div class="panel">
+    <b>Parameter Benda</b><br><br>
+
+    Massa 1 (kg):
+    <input type="number" id="m1" value="2">
+    Kecepatan 1 (m/s):
+    <input type="number" id="v1" value="3"><br><br>
+
+    Massa 2 (kg):
+    <input type="number" id="m2" value="2">
+    Kecepatan 2 (m/s):
+    <input type="number" id="v2" value="-2"><br><br>
+
+    <button onclick="mulai()">Mulai Simulasi</button>
+</div>
+
+<canvas id="canvas" width="600" height="200"></canvas>
+
+<p id="hasil"></p>
+
+<script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    let x1, x2, v1, v2, m1, m2;
+    let tumbukan = false;
+
+    function mulai() {
+        m1 = parseFloat(document.getElementById("m1").value);
+        m2 = parseFloat(document.getElementById("m2").value);
+        v1 = parseFloat(document.getElementById("v1").value);
+        v2 = parseFloat(document.getElementById("v2").value);
+
+        x1 = 100;
+        x2 = 500;
+        tumbukan = false;
+
+        document.getElementById("hasil").innerHTML = "";
+        requestAnimationFrame(update);
+    }
+
+    function update() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Benda 1
+        ctx.beginPath();
+        ctx.arc(x1, 100, 20, 0, Math.PI * 2);
+        ctx.fillStyle = "blue";
+        ctx.fill();
+
+        // Benda 2
+        ctx.beginPath();
+        ctx.arc(x2, 100, 20, 0, Math.PI * 2);
+        ctx.fillStyle = "red";
+        ctx.fill();
+
+        // Gerak
+        x1 += v1;
+        x2 += v2;
+
+        // Deteksi tumbukan
+        if (!tumbukan && Math.abs(x1 - x2) <= 40) {
+            tumbukan = true;
+
+            let v1Awal = v1;
+            let v2Awal = v2;
+
+            // Rumus tumbukan lenting sempurna
+            v1 = ((m1 - m2) * v1Awal + 2 * m2 * v2Awal) / (m1 + m2);
+            v2 = ((m2 - m1) * v2Awal + 2 * m1 * v1Awal) / (m1 + m2);
+
+            let impuls1 = m1 * (v1 - v1Awal);
+            let impuls2 = m2 * (v2 - v2Awal);
+
+            document.getElementById("hasil").innerHTML =
+                `<b>Hasil Tumbukan:</b><br>
+                 Kecepatan akhir benda 1 = ${v1.toFixed(2)} m/s<br>
+                 Kecepatan akhir benda 2 = ${v2.toFixed(2)} m/s<br>
+                 Impuls benda 1 = ${impuls1.toFixed(2)} Ns<br>
+                 Impuls benda 2 = ${impuls2.toFixed(2)} Ns`;
+        }
+
+        if (x1 < canvas.width && x2 > 0) {
+            requestAnimationFrame(update);
+        }
+    }
+</script>
+
+</body>
+</html>

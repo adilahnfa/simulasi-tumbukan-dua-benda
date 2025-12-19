@@ -1,0 +1,30 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f8;
+    text-align: center;
+}
+
+canvas {
+    background: white;
+    border: 2px solid black;
+    margin-top: 10px;
+}
+
+.panel {
+    margin: 10px auto;
+    width: 600px;
+    background: #ffffff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+
+input {
+    width: 60px;
+}
+
+button {
+    padding: 8px 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
